@@ -27,11 +27,11 @@ int main(void) {
         drawPlayer(Player);
         if(frame_timer == 0) moveInvaders(&Invaders[0], &invaderDirection, cols);
         drawInvaders(&Invaders[0]);
+        isRunning = checkCollisions(&Player, &Invaders[0]);
         drawBullets(&Player);
-        isRunning = checkCollisions();
         if(frame_timer == 0) moveBullets(&Player);
         drawScores(&Player, cols);
-        isRunning = pollInput(&Player);
+        isRunning = pollInput(&Player) && isRunning;
         refresh();
         frame_timer++;
         frame_timer = frame_timer % 1000;

@@ -35,6 +35,35 @@ void drawBullets(player *Player) {
     }
 }
 
+void drawExplosion(int x, int y, int xEnd, int yEnd, int maxCols) {
+    char expBigLine[maxCols];
+    char expSmallLine[maxCols];
+    char expBlankLine[maxCols];
+    int i = 0;
+    for(i = 0; i<maxCols; i++) {
+        expBigLine[i] = 0;
+        expSmallLine[i] = 0;
+        expBlankLine[i] = 0;
+    }
+    for(i = 0; i <= (xEnd - x); i++) {
+        expBigLine[i] = 'X';
+        expSmallLine[i] = 'x';
+        expBlankLine[i] = ' ';
+    }
+    for(i = y; i <= yEnd; i++) {
+        mvprintw(i, x, expBigLine);
+    }
+    refresh();
+    for(i = y; i <= yEnd; i++) {
+        mvprintw(i, x, expSmallLine);
+    }
+    refresh();
+    for(i = y; i <= yEnd; i++) {
+        mvprintw(i, x, expBlankLine);
+    }
+    refresh();
+}
+
 // Screen
 void initScreen(int *actRows, int* actCols) {
     initscr();

@@ -80,8 +80,36 @@ void moveBullets(player *Player) {
 }
 
 // Collisions
-bool checkCollisions() {
-    // TODO: Add collision checking code for invaders and bullets
+bool checkCollisions(player *Player, invader *Invaders) {
+    int ch = 0, b = 0, i = 0;
+    char balls[2];
+    for(b = 0; b < MAX_PLAYER_BULLETS; b++) {
+        if(Player->bullets[b].active)
+        {
+            ch = mvinch(Player->bullets[b].Y, Player->bullets[b].X);
+            balls[0] = ch;
+            balls[1] = 0;
+            mvprintw(0,0,balls);
+            switch((char)ch) {
+                case '#':
+                    Player->bullets[b].active = false;
+                    drawExplosion(Player->bullets[b].X, Player->bullets[b].Y, Player->bullets[b].X, Player->bullets[b].Y, Player->maxX);
+                case '(':
+                case '-':
+                case 'O':
+                case ')':
+                    Player->bullets[b].active = false;
+                    Player->score += 100;
+                    for(i = 0; i<MAX_INVADERS; i++) {
+                        if (!Invaders[i].active) continue;
+                        if (Invaders[i].Y == Player->bullets[b].Y && Player->bullets[b].X >= Invaders[i].X && Player->bullets[b].X <= Invaders[i].X+4) {
+                            Invaders[i].active = false;
+                            drawExplosion(Invaders[i].X, Invaders[i].Y, Invaders[i].X+4, Invaders[i].Y, Player->maxX);
+                        }
+                    }
+            }
+        }
+    }
     return true;
 }
 
