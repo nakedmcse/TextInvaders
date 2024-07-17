@@ -36,6 +36,17 @@ void drawBullets(player *Player) {
 }
 
 // Screen
+void initScreen(int *actRows, int* actCols) {
+    initscr();
+    getmaxyx(stdscr, *actRows, *actCols);
+    clear();
+    curs_set(0);
+    cbreak();
+    noecho();
+    nodelay(stdscr, TRUE);
+    refresh();
+}
+
 void drawScores(player *Player, int maxCols) {
     char hud[maxCols+1];
     int i = 0;

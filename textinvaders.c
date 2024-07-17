@@ -8,18 +8,6 @@
 #include "physics.h"
 #include "input.h"
 
-// Funcs
-void initScreen(int *actRows, int* actCols) {
-    initscr();
-    getmaxyx(stdscr, *actRows, *actCols);
-    clear();
-    curs_set(0);
-    cbreak();
-    noecho();
-    nodelay(stdscr, TRUE);
-    refresh();
-}
-
 int main(void) {
     bool isRunning = true;
     int rows, cols;
