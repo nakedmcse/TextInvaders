@@ -34,14 +34,15 @@ void drawExplosions(explosion *Explosions, int maxCols) {
             for(c = 0; c <= (Explosions[i].xEnd - Explosions[i].X); c++) {
                 expLine[c] = ' ';
             }
-            expLine[c+1] = 0;
+            expLine[(Explosions[i].xEnd - Explosions[i].X)+1] = 0;
         }
         else {
             Explosions[i].frames--;
             for(c = 0; c <= (Explosions[i].xEnd - Explosions[i].X); c++) {
-                expLine[c] = expChars[rand() % 3];
+                //expLine[c] = expChars[rand() % 3];
+                expLine[c] = '*';
             }
-            expLine[c+1] = 0;
+            expLine[(Explosions[i].xEnd - Explosions[i].X)+1] = 0;
         }
         mvprintw(0, 0, "Drawing Explosion %d at %d, %d as %s", i, Explosions[i].X, Explosions[i].Y, expLine);
         for(i = Explosions[i].Y; i <= Explosions[i].yEnd; i++) {
