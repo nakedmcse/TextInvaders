@@ -22,6 +22,34 @@ void drawInvaders(invader *Invaders) {
     }
 }
 
+// Explosions
+void drawExplosions(explosion *Explosions, int maxCols) {
+    int i, c = 0;
+    char expChars[3] = ".xX";
+    char expLine[maxCols];
+    for(i = 0; i < MAX_EXPLOSIONS; i++) {
+        if(!Explosions[i].active) continue;
+        if(Explosions[i].frames == 0) {
+            Explosions[i].active = false;
+            for(c = 0; c <= (Explosions[i].xEnd - Explosions[i].X); c++) {
+                expLine[c] = ' ';
+            }
+            expLine[c+1] = 0;
+        }
+        else {
+            Explosions[i].frames--;
+            for(c = 0; c <= (Explosions[i].xEnd - Explosions[i].X); c++) {
+                expLine[c] = expChars[rand() % 3];
+            }
+            expLine[c+1] = 0;
+        }
+        mvprintw(0, 0, "Drawing Explosion %d at %d, %d as %s", i, Explosions[i].X, Explosions[i].Y, expLine);
+        for(i = Explosions[i].Y; i <= Explosions[i].yEnd; i++) {
+            mvprintw(i, Explosions[i].X, expLine);
+        }
+    }
+}
+
 // Bullets
 void drawBullets(player *Player) {
     int b = 0;
@@ -33,35 +61,6 @@ void drawBullets(player *Player) {
             Player->bullets[b].oldY = Player->bullets[b].Y;
         }
     }
-}
-
-void drawExplosion(int x, int y, int xEnd, int yEnd, int maxCols) {
-    char expBigLine[maxCols];
-    char expSmallLine[maxCols];
-    char expBlankLine[maxCols];
-    int i = 0;
-    for(i = 0; i<maxCols; i++) {
-        expBigLine[i] = 0;
-        expSmallLine[i] = 0;
-        expBlankLine[i] = 0;
-    }
-    for(i = 0; i <= (xEnd - x); i++) {
-        expBigLine[i] = 'X';
-        expSmallLine[i] = 'x';
-        expBlankLine[i] = ' ';
-    }
-    for(i = y; i <= yEnd; i++) {
-        mvprintw(i, x, expBigLine);
-    }
-    refresh();
-    for(i = y; i <= yEnd; i++) {
-        mvprintw(i, x, expSmallLine);
-    }
-    refresh();
-    for(i = y; i <= yEnd; i++) {
-        mvprintw(i, x, expBlankLine);
-    }
-    refresh();
 }
 
 // Screen

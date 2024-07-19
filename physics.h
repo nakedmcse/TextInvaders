@@ -50,6 +50,33 @@ void moveInvaders(invader *Invaders, int *direction, int maxCol) {
     }
 }
 
+// Explosions
+void initExplosions(explosion *Explosions) {
+    int i = 0;
+    for(i = 0; i < MAX_EXPLOSIONS; i++) {
+        Explosions[i].X = 0;
+        Explosions[i].Y = 0;
+        Explosions[i].xEnd = 0;
+        Explosions[i].yEnd = 0;
+        Explosions[i].frames = 0;
+        Explosions[i].active = false;
+    }
+}
+
+void spawnExplosion(explosion *Explosions, int x, int y, int xEnd, int yEnd, int frames) {
+    int i = 0;
+    for(i = 0; i < MAX_EXPLOSIONS; i++) {
+        if(Explosions[i].active) continue;
+        Explosions[i].X = x;
+        Explosions[i].Y = y;
+        Explosions[i].xEnd = xEnd;
+        Explosions[i].yEnd = yEnd;
+        Explosions[i].frames = frames;
+        Explosions[i].active = true;
+        break;
+    }
+}
+
 // Bullets
 void moveBullets(player *Player) {
     int b = 0;
@@ -80,7 +107,7 @@ void moveBullets(player *Player) {
 }
 
 // Collisions
-bool checkCollisions(player *Player, invader *Invaders) {
+bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
     int ch = 0, b = 0, i = 0;
     for(b = 0; b < MAX_PLAYER_BULLETS; b++) {
         if(Player->bullets[b].active)
@@ -89,7 +116,7 @@ bool checkCollisions(player *Player, invader *Invaders) {
             switch((char)ch) {
                 case '#':
                     Player->bullets[b].active = false;
-                    drawExplosion(Player->bullets[b].X, Player->bullets[b].Y, Player->bullets[b].X, Player->bullets[b].Y, Player->maxX);
+                    spawnExplosion(Explosions, Player->bullets[b].X, Player->bullets[b].Y, Player->bullets[b].X, Player->bullets[b].Y, 3);
                     mvprintw(Player->bullets[b].oldY, Player->bullets[b].oldX, " ");
                 case '(':
                 case '-':
@@ -102,7 +129,7 @@ bool checkCollisions(player *Player, invader *Invaders) {
                         if (!Invaders[i].active) continue;
                         if (Invaders[i].Y == Player->bullets[b].Y && Player->bullets[b].X >= Invaders[i].X-2 && Player->bullets[b].X <= Invaders[i].X+2) {
                             Invaders[i].active = false;
-                            drawExplosion(Invaders[i].X-2, Invaders[i].Y, Invaders[i].X+2, Invaders[i].Y, Player->maxX);
+                            spawnExplosion(Explosions, Invaders[i].X-2, Invaders[i].Y, Invaders[i].X+2, Invaders[i].Y, 3);
                         }
                     }
             }
