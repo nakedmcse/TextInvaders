@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ncurses.h>
+#include<SDL2/SDL.h>
 #include "types.h"
 #include "render.h"
 #include "physics.h"
@@ -12,18 +13,20 @@
 int main(void) {
     bool isRunning = true;
     int rows, cols;
-    int frame_timer = 0;
+    int frame_timer = 0, frame_divisor = 1000;
     int invaderDirection = INVADER_LEFT;
     player Player;
     invader Invaders[MAX_INVADERS];
     explosion Explosions[MAX_EXPLOSIONS];
+    SDL_Joystick *joystick = NULL;
 
     // Init Game
-    initScreen(&rows, &cols);
+    joystick = initScreen(&rows, &cols);
     initInvaders(&Invaders[0], cols);
     initPlayer(&Player, rows, cols);
     initBases(rows, cols);
     initExplosions(&Explosions[0]);
+    if(joystick) frame_divisor = 500;
 
     // Main Loop
     while(isRunning) {
@@ -36,12 +39,14 @@ int main(void) {
         drawBullets(&Player, &Invaders[0]);
         if(frame_timer == 0) moveBullets(&Player, &Invaders[0]);
         drawScores(&Player, cols);
-        isRunning = pollInput(&Player) && isRunning;
+        isRunning = pollInput(&Player, joystick, frame_timer) && isRunning;
         refresh();
         frame_timer++;
-        frame_timer = frame_timer % 1000;
+        frame_timer = frame_timer % frame_divisor;
     }
 
     endwin();
+    SDL_JoystickClose(joystick);
+    SDL_Quit();
     return 0;
 }

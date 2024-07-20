@@ -2,10 +2,26 @@
 #ifndef TEXTINVADER_INPUT
 #define TEXTINVADER_INPUT
 
-bool pollInput(player *Player) {
+bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer) {
     int ch = getch();
     int b = 0;
     bool quit = false;
+
+    if(joystick) {
+        SDL_Event joyEvt;
+        while (SDL_PollEvent(&joyEvt)) {
+            if (joyEvt.type == SDL_JOYBUTTONDOWN) {
+                ch = ' '; // pass fire to action
+            }
+        }
+
+        int xaxis = SDL_JoystickGetAxis(joystick, 0);
+        if (xaxis < -8000 & frame_timer == 0) {
+            ch = 'z';
+        } else if (xaxis > 8000 & frame_timer == 0) {
+            ch = 'x';
+        }
+    }
 
     switch((char)ch) {
     case 'z':
