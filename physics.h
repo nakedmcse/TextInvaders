@@ -157,6 +157,7 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
                     Player->bullets[b].active = false;
                     spawnExplosion(Explosions, Player->bullets[b].X, Player->bullets[b].Y, Player->bullets[b].X, Player->bullets[b].Y, 6);
                     mvprintw(Player->bullets[b].oldY, Player->bullets[b].oldX, " ");
+                    break;
                 case '(':
                 case '-':
                 case 'O':
@@ -174,7 +175,31 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
             }
         }
     }
-    return true;
+    for(b = 0; b < MAX_INVADERS; b++) {
+        if(Invaders[b].bullet.active)
+        {
+            ch = mvinch(Invaders[b].bullet.Y, Invaders[b].bullet.X);
+            switch((char)ch) {
+            case '#':
+                Invaders[b].bullet.active = false;
+                spawnExplosion(Explosions, Invaders[b].bullet.X, Invaders[b].bullet.Y, Invaders[b].bullet.X, Invaders[b].bullet.Y, 6);
+                mvprintw(Invaders[b].bullet.oldY, Invaders[b].bullet.oldX, " ");
+                break;
+            case '-':
+            case '!':
+                if (Invaders[b].bullet.Y == Player->Y && Invaders[b].bullet.X >= Player->X-2 && Invaders[b].bullet.X <= Player->X+2) {
+                    Invaders[b].bullet.active = false;
+                    spawnExplosion(Explosions, Player->X-2, Player->Y, Player->X+2, Player->Y, 6);
+                    mvprintw(Invaders[b].bullet.oldY, Invaders[b].bullet.oldX, " ");
+                    Player->lives--;
+                    Player->X = Player->maxX/2;
+                    Player->oldX = Player->X;
+                }
+                break;
+            }
+        }
+    }
+    return Player->lives > 0;
 }
 
 #endif
