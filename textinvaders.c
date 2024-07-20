@@ -32,8 +32,9 @@ int main(void) {
         drawInvaders(&Invaders[0]);
         isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0]);
         if(frame_timer == 0) drawExplosions(&Explosions[0], cols);
-        drawBullets(&Player);
-        if(frame_timer == 0) moveBullets(&Player);
+        fireInvaders(&Invaders[0], &Player);
+        drawBullets(&Player, &Invaders[0]);
+        if(frame_timer == 0) moveBullets(&Player, &Invaders[0]);
         drawScores(&Player, cols);
         isRunning = pollInput(&Player) && isRunning;
         refresh();

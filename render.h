@@ -50,7 +50,7 @@ void drawExplosions(explosion *Explosions, int maxCols) {
 }
 
 // Bullets
-void drawBullets(player *Player) {
+void drawBullets(player *Player, invader *Invaders) {
     int b = 0;
     for(b = 0; b < MAX_PLAYER_BULLETS; b++) {
         if(Player->bullets[b].active) {
@@ -58,6 +58,14 @@ void drawBullets(player *Player) {
             mvprintw(Player->bullets[b].Y, Player->bullets[b].X, "|");
             Player->bullets[b].oldX = Player->bullets[b].X;
             Player->bullets[b].oldY = Player->bullets[b].Y;
+        }
+    }
+    for(b = 0; b < MAX_INVADERS; b++) {
+        if(Invaders[b].bullet.active) {
+            mvprintw(Invaders[b].bullet.oldY, Invaders[b].bullet.oldX, " ");
+            mvprintw(Invaders[b].bullet.Y, Invaders[b].bullet.X, "*");
+            Invaders[b].bullet.oldX = Invaders[b].bullet.X;
+            Invaders[b].bullet.oldY = Invaders[b].bullet.Y;
         }
     }
 }

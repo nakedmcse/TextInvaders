@@ -50,6 +50,21 @@ void moveInvaders(invader *Invaders, int *direction, int maxCol) {
     }
 }
 
+void fireInvaders(invader *Invaders, player *Player) {
+    int i = 0;
+    for(i = 0; i < MAX_INVADERS; i++) {
+        if(!Invaders[i].active || Invaders[i].bullet.active) continue;
+        if(Invaders[i].X == Player->X || (rand() % 10) > 6) {
+            Invaders[i].bullet.direction = BULLET_DOWN;
+            Invaders[i].bullet.X = Invaders[i].X;
+            Invaders[i].bullet.Y = Invaders[i].Y;
+            Invaders[i].bullet.oldX = Invaders[i].X;
+            Invaders[i].bullet.oldY = Invaders[i].Y;
+            Invaders[i].bullet.active = true;
+        }
+    }
+}
+
 // Explosions
 void initExplosions(explosion *Explosions) {
     int i = 0;
@@ -78,7 +93,7 @@ void spawnExplosion(explosion *Explosions, int x, int y, int xEnd, int yEnd, int
 }
 
 // Bullets
-void moveBullets(player *Player) {
+void moveBullets(player *Player, invader *Invaders) {
     int b = 0;
     for(b = 0; b < MAX_PLAYER_BULLETS; b++) {
         if(Player->bullets[b].active) {
@@ -100,6 +115,30 @@ void moveBullets(player *Player) {
                 }
                 Player->bullets[b].active = false;
                 mvprintw(Player->bullets[b].Y, Player->bullets[b].X, " ");
+                break;
+            }
+        }
+    }
+    for(b = 0; b < MAX_INVADERS; b++) {
+        if(Invaders[b].bullet.active) {
+            switch(Invaders[b].bullet.direction) {
+            case BULLET_UP:
+                if(Invaders[b].bullet.Y > 0) {
+                    Invaders[b].bullet.oldY = Invaders[b].bullet.Y;
+                    Invaders[b].bullet.Y--;
+                    break;
+                }
+                Invaders[b].bullet.active = false;
+                mvprintw(Invaders[b].bullet.Y, Invaders[b].bullet.X, " ");
+                break;
+            case BULLET_DOWN:
+                if(Invaders[b].bullet.Y < Player->maxY) {
+                    Invaders[b].bullet.oldY = Invaders[b].bullet.Y;
+                    Invaders[b].bullet.Y++;
+                    break;
+                }
+                Invaders[b].bullet.active = false;
+                mvprintw(Invaders[b].bullet.Y, Invaders[b].bullet.X, " ");
                 break;
             }
         }
