@@ -25,7 +25,7 @@ void drawInvaders(invader *Invaders) {
 // Explosions
 void drawExplosions(explosion *Explosions, int maxCols) {
     int i, j, c = 0;
-    char expChars[3] = ".xX";
+    char expChars[6] = ".oO*xX";
     char expLine[maxCols];
     for(i = 0; i < MAX_EXPLOSIONS; i++) {
         if(!Explosions[i].active) continue;
@@ -39,7 +39,7 @@ void drawExplosions(explosion *Explosions, int maxCols) {
         else {
             Explosions[i].frames--;
             for(c = 0; c <= (Explosions[i].xEnd - Explosions[i].X); c++) {
-                expLine[c] = expChars[rand() % 3];
+                expLine[c] = expChars[rand() % 6];
             }
             expLine[(Explosions[i].xEnd - Explosions[i].X)+1] = 0;
         }

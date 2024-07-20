@@ -31,7 +31,7 @@ int main(void) {
         if(frame_timer == 0) moveInvaders(&Invaders[0], &invaderDirection, cols);
         drawInvaders(&Invaders[0]);
         isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0]);
-        drawExplosions(&Explosions[0], cols);
+        if(frame_timer == 0) drawExplosions(&Explosions[0], cols);
         drawBullets(&Player);
         if(frame_timer == 0) moveBullets(&Player);
         drawScores(&Player, cols);

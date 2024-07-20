@@ -116,7 +116,7 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
             switch((char)ch) {
                 case '#':
                     Player->bullets[b].active = false;
-                    spawnExplosion(Explosions, Player->bullets[b].X, Player->bullets[b].Y, Player->bullets[b].X, Player->bullets[b].Y, 3);
+                    spawnExplosion(Explosions, Player->bullets[b].X, Player->bullets[b].Y, Player->bullets[b].X, Player->bullets[b].Y, 6);
                     mvprintw(Player->bullets[b].oldY, Player->bullets[b].oldX, " ");
                 case '(':
                 case '-':
@@ -129,7 +129,7 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
                         if (!Invaders[i].active) continue;
                         if (Invaders[i].Y == Player->bullets[b].Y && Player->bullets[b].X >= Invaders[i].X-2 && Player->bullets[b].X <= Invaders[i].X+2) {
                             Invaders[i].active = false;
-                            spawnExplosion(Explosions, Invaders[i].X-2, Invaders[i].Y, Invaders[i].X+2, Invaders[i].Y, 3);
+                            spawnExplosion(Explosions, Invaders[i].X-2, Invaders[i].Y, Invaders[i].X+2, Invaders[i].Y, 6);
                         }
                     }
             }
