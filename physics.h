@@ -32,15 +32,20 @@ void initInvaders(invader *Invaders, int maxCols) {
     }
 }
 
-void moveInvaders(invader *Invaders, int *direction, int maxCol) {
-    int i = 0;
+void moveInvaders(invader *Invaders, int *direction, int maxCol, int *wave) {
+    int i, active = 0;
     bool moveDown = false;
     for(i = 0; i < MAX_INVADERS; i++) {
         if(!Invaders[i].active) continue;
+        active++;
         Invaders[i].oldX = Invaders[i].X;
         Invaders[i].oldY = Invaders[i].Y;
         Invaders[i].X += *direction;
         moveDown = (Invaders[i].X == 2 || Invaders[i].X == maxCol-2 || moveDown);
+    }
+    if (active == 0) {
+        *wave = *wave + 1;
+        initInvaders(Invaders, maxCol);
     }
     if (moveDown) {
         *direction = 0-*direction;
@@ -51,11 +56,12 @@ void moveInvaders(invader *Invaders, int *direction, int maxCol) {
     }
 }
 
-void fireInvaders(invader *Invaders, player *Player) {
+void fireInvaders(invader *Invaders, player *Player, int wave) {
     int i = 0;
+    if(wave > 3) wave = 3;
     for(i = 0; i < MAX_INVADERS; i++) {
         if(!Invaders[i].active || Invaders[i].bullet.active) continue;
-        if(Invaders[i].X == Player->X || (rand() % 10) > 6) {
+        if(Invaders[i].X == Player->X || (rand() % 10) > (10 - wave)) {
             Invaders[i].bullet.direction = BULLET_DOWN;
             Invaders[i].bullet.X = Invaders[i].X;
             Invaders[i].bullet.Y = Invaders[i].Y;
@@ -199,6 +205,7 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
                 break;
             }
         }
+        if(Invaders[b].active && Invaders[b].Y == Player->Y) Player->lives = 0;
     }
     return Player->lives > 0;
 }

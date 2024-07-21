@@ -84,12 +84,12 @@ SDL_Joystick *initScreen(int *actRows, int* actCols) {
     return SDL_JoystickOpen(0);
 }
 
-void drawScores(player *Player, int maxCols) {
+void drawScores(player *Player, int wave, int maxCols) {
     char hud[maxCols+1];
     int i = 0;
     for(i = 0; i<maxCols; i++) hud[i] = ' ';
     hud[maxCols] = 0;
-    snprintf(hud, sizeof(hud), " Text Invaders!  SCORE:%05d  LIVES: ", Player->score);
+    snprintf(hud, sizeof(hud), " Text Invaders!  SCORE:%05d  WAVE:%02d  LIVES: ", Player->score, wave);
     for(i = 0; i<Player->lives; i++) strcat(hud, "--!--   ");
     hud[strlen(hud)] = ' ';
     attron(A_REVERSE);

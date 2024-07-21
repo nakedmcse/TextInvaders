@@ -14,7 +14,7 @@ int main(void) {
     bool isRunning = true;
     int rows, cols;
     int frame_timer = 0, frame_divisor = 1000;
-    int invaderDirection = INVADER_LEFT;
+    int invaderDirection = INVADER_LEFT, wave = 1;
     player Player;
     invader Invaders[MAX_INVADERS];
     explosion Explosions[MAX_EXPLOSIONS];
@@ -32,14 +32,14 @@ int main(void) {
     // Main Loop
     while(isRunning) {
         drawPlayer(Player);
-        if(frame_timer == 0) moveInvaders(&Invaders[0], &invaderDirection, cols);
+        if(frame_timer == 0) moveInvaders(&Invaders[0], &invaderDirection, cols, &wave);
         drawInvaders(&Invaders[0]);
         isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0]);
         if(frame_timer == 0) drawExplosions(&Explosions[0], cols);
-        if(frame_timer == 0) fireInvaders(&Invaders[0], &Player);
+        if(frame_timer == 0) fireInvaders(&Invaders[0], &Player, wave);
         drawBullets(&Player, &Invaders[0]);
         if(frame_timer == 0) moveBullets(&Player, &Invaders[0]);
-        drawScores(&Player, cols);
+        drawScores(&Player, wave, cols);
         isRunning = pollInput(&Player, joystick, frame_timer) && isRunning;
         refresh();
         frame_timer++;
