@@ -80,7 +80,7 @@ SDL_Joystick *initScreen(int *actRows, int* actCols) {
     noecho();
     nodelay(stdscr, TRUE);
     refresh();
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
+    SDL_Init(SDL_INIT_GAMECONTROLLER);
     return SDL_JoystickOpen(0);
 }
 
@@ -104,6 +104,29 @@ void initBases(int rows, int cols) {
         mvprintw(rows-4, (i*10)+10, "#####");
         mvprintw(rows-3, (i*10)+10, "#####");
     }
+}
+
+void gameOver(int rows, int cols) {
+    clear();
+    mvprintw(rows/2, (cols-16)/2, "G A M E  O V E R");
+    refresh();
+    while(getch() == ERR) {};
+    clear();
+}
+
+void gameStart(int rows, int cols) {
+    clear();
+    int r = (rows/2) - 2;
+    attron(A_REVERSE);
+    mvprintw(r, (cols-27)/2, " T E X T  I N V A D E R S ! ");
+    attroff(A_REVERSE);
+    mvprintw(r+2, (cols-26)/2, "Z   | Joystick Left -- Left");
+    mvprintw(r+3, (cols-26)/2, "X   | Joystick Right -- Right");
+    mvprintw(r+4, (cols-26)/2, "SPC | Joystick Fire -- Shoot");
+    mvprintw(r+6, (cols-22)/2, "Press any key to start");
+    refresh();
+    while(getch() == ERR) {};
+    clear();
 }
 
 #endif
