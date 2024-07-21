@@ -28,6 +28,7 @@ void initInvaders(invader *Invaders, int maxCols) {
         Invaders[i].Y = (i / perLine) * 2;
         Invaders[i].oldX = Invaders[i].X;
         Invaders[i].oldY = Invaders[i].Y;
+        Invaders[i].bullet.active = false;
     }
 }
 
@@ -39,7 +40,7 @@ void moveInvaders(invader *Invaders, int *direction, int maxCol) {
         Invaders[i].oldX = Invaders[i].X;
         Invaders[i].oldY = Invaders[i].Y;
         Invaders[i].X += *direction;
-        moveDown = (Invaders[i].X == 0 || Invaders[i].X == maxCol-5 || moveDown);
+        moveDown = (Invaders[i].X == 2 || Invaders[i].X == maxCol-2 || moveDown);
     }
     if (moveDown) {
         *direction = 0-*direction;
