@@ -41,6 +41,6 @@ Edit textinvaders.c line 16 int frame_timer = 0, frame_divisor = 50;
 cd ..
 w64devkit.exe
 cd /w64devkit
-gcc -O3 -o textinvaders.exe src/TextInvaders/textinvaders.c -IC:/w64devkit/include -lncurses -lSDL2
+gcc -O3 -o textinvaders.exe src/TextInvaders/textinvaders.c -IC:/w64devkit/include -lncursesw -lSDL2
 textinvaders.exe
 ```
