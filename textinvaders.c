@@ -22,7 +22,7 @@ int main(void) {
 
     // Init Game
     joystick = initScreen(&rows, &cols);
-    initInvaders(&Invaders[0], cols);
+    initInvaders(&Invaders[0], cols, wave);
     initPlayer(&Player, rows, cols);
     initExplosions(&Explosions[0]);
     if(joystick) frame_divisor = 500;
@@ -46,7 +46,7 @@ int main(void) {
         frame_timer = frame_timer % frame_divisor;
     }
 
-    if(Player.lives == 0) gameOver(rows, cols, &Player);
+    if(Player.lives == 0) gameOver(rows, cols, wave, &Player);
     endwin();
     SDL_JoystickClose(joystick);
     SDL_Quit();

@@ -19,10 +19,15 @@ void initPlayer(player *Player, int rows, int cols) {
 }
 
 // Invaders
-void initInvaders(invader *Invaders, int maxCols) {
+void initInvaders(invader *Invaders, int maxCols, int wave) {
     int i = 0;
     int perLine = (maxCols - 20)/10;
+    int spawnInvaders = perLine * wave > MAX_INVADERS ? MAX_INVADERS : perLine * wave;
     for(i = 0; i < MAX_INVADERS; i++) {
+        Invaders[i].active = false;
+        Invaders[i].bullet.active = false;
+    }
+    for(i = 0; i < spawnInvaders; i++) {
         Invaders[i].active = true;
         Invaders[i].X = ((i % perLine) * 10) + 10;
         Invaders[i].Y = (i / perLine) * 2;
@@ -51,7 +56,7 @@ void moveInvaders(invader *Invaders, int *direction, int maxCol, int *wave) {
                 mvprintw(Invaders[i].bullet.Y, Invaders[i].bullet.X, " ");
             }
         }
-        initInvaders(Invaders, maxCol);
+        initInvaders(Invaders, maxCol, *wave);
     }
     if (moveDown) {
         *direction = 0-*direction;

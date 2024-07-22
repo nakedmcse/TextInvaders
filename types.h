@@ -9,7 +9,7 @@
 #define INVADER_RIGHT 1
 #define MAX_PLAYER_BULLETS 5
 #define MAX_PLAYER_LIVES 3
-#define MAX_INVADERS 10
+#define MAX_INVADERS 50
 #define MAX_EXPLOSIONS 100
 
 // Types
