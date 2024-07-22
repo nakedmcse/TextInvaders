@@ -124,7 +124,8 @@ void gameStart(int rows, int cols) {
     mvprintw(r+2, (cols-26)/2, "Z   | Joystick Left -- Left");
     mvprintw(r+3, (cols-26)/2, "X   | Joystick Right -- Right");
     mvprintw(r+4, (cols-26)/2, "SPC | Joystick Fire -- Shoot");
-    mvprintw(r+6, (cols-22)/2, "Press any key to start");
+    mvprintw(r+5, (cols-26)/2, "Q                   -- Quit");
+    mvprintw(r+7, (cols-22)/2, "Press any key to start");
     refresh();
     while(getch() == ERR) {};
     clear();
