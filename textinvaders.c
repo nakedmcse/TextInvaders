@@ -46,7 +46,7 @@ int main(void) {
         frame_timer = frame_timer % frame_divisor;
     }
 
-    if(Player.lives == 0) gameOver(rows, cols);
+    if(Player.lives == 0) gameOver(rows, cols, &Player);
     endwin();
     SDL_JoystickClose(joystick);
     SDL_Quit();

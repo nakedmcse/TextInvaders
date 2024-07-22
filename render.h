@@ -106,9 +106,10 @@ void initBases(int rows, int cols) {
     }
 }
 
-void gameOver(int rows, int cols) {
+void gameOver(int rows, int cols, player *Player) {
     clear();
     mvprintw(rows/2, (cols-16)/2, "G A M E  O V E R");
+    mvprintw((rows/2)+2, (cols-12)/2, "SCORE: %05d", Player->score);
     refresh();
     while(getch() == ERR) {};
     clear();

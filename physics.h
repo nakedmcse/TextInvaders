@@ -45,6 +45,12 @@ void moveInvaders(invader *Invaders, int *direction, int maxCol, int *wave) {
     }
     if (active == 0) {
         *wave = *wave + 1;
+        for(i = 0; i < MAX_INVADERS; i++) {
+            if(Invaders[i].bullet.active) {
+                Invaders[i].bullet.active = false;
+                mvprintw(Invaders[i].bullet.Y, Invaders[i].bullet.X, " ");
+            }
+        }
         initInvaders(Invaders, maxCol);
     }
     if (moveDown) {
