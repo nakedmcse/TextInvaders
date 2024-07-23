@@ -2,7 +2,6 @@
 #include<stdio.h>
 #include<stdbool.h>
 #include<stdlib.h>
-#include<string.h>
 #include<ncurses.h>
 #include<SDL2/SDL.h>
 #include "types.h"
