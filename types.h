@@ -11,6 +11,7 @@
 #define MAX_PLAYER_LIVES 3
 #define MAX_INVADERS 50
 #define MAX_EXPLOSIONS 100
+#define MAX_HISCORES 5
 
 // Types
 typedef struct bullet {
@@ -34,5 +35,10 @@ typedef struct explosion {
     int X, Y, xEnd, yEnd, frames;
     bool active;
 } explosion;
+
+typedef struct hiscore {
+    int score, wave;
+    char name[4];
+} hiscore;
 
 #endif

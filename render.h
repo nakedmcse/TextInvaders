@@ -84,6 +84,16 @@ SDL_Joystick *initScreen(int *actRows, int* actCols) {
     return SDL_JoystickOpen(0);
 }
 
+// Hiscore table
+void initHiscores(hiscore *Hiscores) {
+    int i;
+    for(i = 0; i < MAX_HISCORES; i++) {
+        sprintf(Hiscores[i].name, "---");
+        Hiscores[i].score = 0;
+        Hiscores[i].wave = 0;
+    }
+}
+
 void drawScores(player *Player, int wave, int maxCols) {
     char hud[maxCols+1];
     int i = 0;
@@ -106,10 +116,16 @@ void initBases(int rows, int cols) {
     }
 }
 
-void gameOver(int rows, int cols, int wave, player *Player) {
+void gameOver(int rows, int cols, int wave, player *Player, hiscore *Hiscores) {
     clear();
-    mvprintw(rows/2, (cols-16)/2, "G A M E  O V E R");
-    mvprintw((rows/2)+2, (cols-21)/2, "SCORE: %05d  WAVE: %02d", Player->score, wave);
+    int i;
+    int startRow = (rows-(5+MAX_HISCORES))/2;
+    mvprintw(startRow, (cols-16)/2, "G A M E  O V E R");
+    mvprintw(startRow+2, (cols-21)/2, "SCORE: %05d  WAVE: %02d", Player->score, wave);
+    mvprintw(startRow+4, (cols-20)/2, "HISCORE  WAVE  NAME");
+    for(i = 0; i < MAX_HISCORES; i++) {
+        mvprintw(startRow+5+i, (cols-20)/2, " %05d    %02d   %s", Hiscores[i].score, Hiscores[i].wave, Hiscores[i].name);
+    }
     refresh();
     while(getch() == ERR) {};
     clear();

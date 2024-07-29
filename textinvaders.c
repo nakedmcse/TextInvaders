@@ -17,10 +17,12 @@ int main(void) {
     player Player;
     invader Invaders[MAX_INVADERS];
     explosion Explosions[MAX_EXPLOSIONS];
+    hiscore Hiscores[MAX_HISCORES];
     SDL_Joystick *joystick = NULL;
 
-    // Init Screen
+    // Init Screen and hi score table
     joystick = initScreen(&rows, &cols);
+    initHiscores(&Hiscores[0]);
 
     do {
         // Init Game Objects
@@ -49,7 +51,7 @@ int main(void) {
             frame_timer = frame_timer % frame_divisor;
         }
 
-        if(Player.lives == 0) gameOver(rows, cols, wave, &Player);
+        if(Player.lives == 0) gameOver(rows, cols, wave, &Player, &Hiscores[0]);
     } while(Player.lives == 0);
 
     endwin();
