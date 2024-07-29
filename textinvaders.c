@@ -11,7 +11,7 @@
 
 int main(void) {
     bool isRunning;
-    int rows, cols, wave;
+    int rows, cols, wave, hiscoreIndex;
     int frame_timer = 0, frame_divisor = 1000;
     int invaderDirection = INVADER_LEFT;
     player Player;
@@ -52,7 +52,10 @@ int main(void) {
             frame_timer = frame_timer % frame_divisor;
         }
 
-        if(Player.lives == 0) gameOver(rows, cols, wave, &Player, &Hiscores[0]);
+        if(Player.lives == 0) {
+            hiscoreIndex = checkHiscore(&Player, &Hiscores[0], wave);
+            gameOver(rows, cols, wave, hiscoreIndex, &Player, &Hiscores[0]);
+        }
     } while(Player.lives == 0);
 
     endwin();

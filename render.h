@@ -94,6 +94,18 @@ void initHiscores(hiscore *Hiscores) {
     }
 }
 
+int checkHiscore(player *Player, hiscore *Hiscores, int wave) {
+    int i;
+    for(i = 0; i < MAX_HISCORES; i++) {
+        if (Player->score + wave > Hiscores[i].score + Hiscores[i].wave) {
+            Hiscores[i].score = Player->score;
+            Hiscores[i].wave = wave;
+            break;
+        }
+    }
+    return i;
+}
+
 void drawScores(player *Player, int wave, int maxCols) {
     char hud[maxCols+1];
     int i = 0;
@@ -116,7 +128,7 @@ void initBases(int rows, int cols) {
     }
 }
 
-void gameOver(int rows, int cols, int wave, player *Player, hiscore *Hiscores) {
+void gameOver(int rows, int cols, int wave, int hiscoreIndex, player *Player, hiscore *Hiscores) {
     clear();
     int i;
     int startRow = (rows-(5+MAX_HISCORES))/2;
@@ -126,6 +138,7 @@ void gameOver(int rows, int cols, int wave, player *Player, hiscore *Hiscores) {
     for(i = 0; i < MAX_HISCORES; i++) {
         mvprintw(startRow+5+i, (cols-20)/2, " %05d    %02d   %s", Hiscores[i].score, Hiscores[i].wave, Hiscores[i].name);
     }
+    if (hiscoreIndex != MAX_HISCORES) mvprintw(startRow+5+hiscoreIndex, ((cols-20)/2)+15, "NEW");
     refresh();
     while(getch() == ERR) {};
     clear();
