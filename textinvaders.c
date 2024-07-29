@@ -11,9 +11,9 @@
 
 int main(void) {
     bool isRunning;
-    int rows, cols;
+    int rows, cols, wave;
     int frame_timer = 0, frame_divisor = 1000;
-    int invaderDirection = INVADER_LEFT, wave = 1;
+    int invaderDirection = INVADER_LEFT;
     player Player;
     invader Invaders[MAX_INVADERS];
     explosion Explosions[MAX_EXPLOSIONS];
@@ -26,6 +26,7 @@ int main(void) {
 
     do {
         // Init Game Objects
+        wave = 1;
         initInvaders(&Invaders[0], cols, wave);
         initPlayer(&Player, rows, cols);
         initExplosions(&Explosions[0]);
