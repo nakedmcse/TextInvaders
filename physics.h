@@ -188,10 +188,10 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
                         if (Invaders[i].Y == Player->bullets[b].Y && Player->bullets[b].X >= Invaders[i].X-2 && Player->bullets[b].X <= Invaders[i].X+2) {
                             Invaders[i].active = false;
                             spawnExplosion(Explosions, Invaders[i].X-2, Invaders[i].Y, Invaders[i].X+2, Invaders[i].Y, 6);
+                            beep();
                             break;
                         }
                     }
-                beep();
             }
         }
     }
@@ -214,8 +214,8 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
                     Player->lives--;
                     Player->X = Player->maxX/2;
                     Player->oldX = Player->X;
+                    flash();
                 }
-                flash();
                 break;
             }
         }
