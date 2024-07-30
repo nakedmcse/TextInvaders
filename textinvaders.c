@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include<ncurses.h>
 #include<SDL2/SDL.h>
+#include<sqlite3.h>
 #include "types.h"
 #include "render.h"
 #include "physics.h"
@@ -19,10 +20,11 @@ int main(void) {
     explosion Explosions[MAX_EXPLOSIONS];
     hiscore Hiscores[MAX_HISCORES];
     SDL_Joystick *joystick = NULL;
+    sqlite3 *dbContext = NULL;
 
     // Init Screen and hi score table
     joystick = initScreen(&rows, &cols);
-    initHiscores(&Hiscores[0]);
+    initHiscores(&Hiscores[0], dbContext);
 
     do {
         // Init Game Objects
@@ -61,5 +63,6 @@ int main(void) {
     endwin();
     SDL_JoystickClose(joystick);
     SDL_Quit();
+    if (dbContext) sqlite3_close(dbContext);
     return 0;
 }

@@ -9,12 +9,13 @@ This uses the ncurses library and SDL2 library, which must both be installed in 
 Mac:
 ```bash
 brew install sdl2
-gcc -O3 -o textinvaders -I/usr/local/include/SDL2 -D_THREAD_SAFE -L/usr/local/lib textinvaders.c -lncurses -lSDL2
+brew install sqlite
+gcc -O3 -o textinvaders -I/usr/local/include/SDL2 -D_THREAD_SAFE -L/usr/local/lib textinvaders.c -lncurses -lSDL2 -lsqlite3
 ```
 
 Linux:
 ```bash
-sudo apt-get install libsdl2-dev
+sudo apt-get install libsdl2-dev sqlite3 libsqlite3-dev
 gcc -O3 -o textinvaders textinvaders.c -lncurses -lSDL2
 ```
 

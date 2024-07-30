@@ -85,13 +85,49 @@ SDL_Joystick *initScreen(int *actRows, int* actCols) {
 }
 
 // Hiscore table
-void initHiscores(hiscore *Hiscores) {
-    int i;
+void initHiscores(hiscore *Hiscores, sqlite3 *context) {
+    int i, rc, rows, cols;
+    char *createSql;
+    char *readSql;
+    char *insertSql;
+    char *errMsg = 0;
+    char **results = 0;
+    rc = sqlite3_open("invaders.db", &context);
+    if (rc==SQLITE_OK) {
+        createSql = "CREATE TABLE IF NOT EXISTS HISCORES(ID INT PRIMARY KEY NOT NULL, SCORE INT NOT NULL, WAVE INT NOT NULL, NAME CHAR(3));";
+        rc = sqlite3_exec(context, createSql, NULL, 0, &errMsg);
+        if (rc!=SQLITE_OK) {
+            sqlite3_free(errMsg);
+            sqlite3_close(context);
+            context = NULL;
+        }
+    }
+    if (context) {
+        readSql = "SELECT ID,SCORE,WAVE,NAME FROM HISCORES;";
+        rc = sqlite3_get_table(context, readSql, &results, &rows, &cols, &errMsg);
+        if (rc!=SQLITE_OK) {
+            sqlite3_free(errMsg);
+            sqlite3_free_table(results);
+            sqlite3_close(context);
+            context = NULL;
+        }
+    }
     for(i = 0; i < MAX_HISCORES; i++) {
+        // TODO Fix table data extract, and insert
+        /*
+        if(results) {
+            if(i<rows) {
+                sprintf(Hiscores[i].name, results[3*(i+1)]);
+                Hiscores[i].score = atoi(results[(i+1)]);
+                Hiscores[i].wave = atoi(results[2*(i+1)]);
+            }
+        }
+        */
         sprintf(Hiscores[i].name, "---");
         Hiscores[i].score = 0;
         Hiscores[i].wave = 0;
     }
+    if(results) sqlite3_free_table(results);
 }
 
 int checkHiscore(player *Player, hiscore *Hiscores, int wave) {
