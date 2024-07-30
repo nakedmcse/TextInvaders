@@ -24,7 +24,7 @@ int main(void) {
 
     // Init Screen and hi score table
     joystick = initScreen(&rows, &cols);
-    initHiscores(&Hiscores[0], dbContext);
+    dbContext = initHiscores(&Hiscores[0]);
 
     do {
         // Init Game Objects

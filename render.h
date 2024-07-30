@@ -85,11 +85,12 @@ SDL_Joystick *initScreen(int *actRows, int* actCols) {
 }
 
 // Hiscore table
-void initHiscores(hiscore *Hiscores, sqlite3 *context) {
+sqlite3 *initHiscores(hiscore *Hiscores) {
     int i, rc, rows, cols;
     char *createSql, *readSql;
     char *errMsg = 0;
     char **results = 0;
+    sqlite3 *context = NULL;
     rc = sqlite3_open("invaders.db", &context);
     if (rc==SQLITE_OK) {
         createSql = "CREATE TABLE IF NOT EXISTS HISCORES(ID INT PRIMARY KEY NOT NULL, SCORE INT NOT NULL, WAVE INT NOT NULL, NAME CHAR(3));";
@@ -123,6 +124,7 @@ void initHiscores(hiscore *Hiscores, sqlite3 *context) {
         Hiscores[i].wave = 0;
     }
     if(results) sqlite3_free_table(results);
+    return context;
 }
 
 int checkHiscore(sqlite3 *context, player *Player, hiscore *Hiscores, int wave) {
@@ -138,7 +140,7 @@ int checkHiscore(sqlite3 *context, player *Player, hiscore *Hiscores, int wave) 
                 rc = rc | sqlite3_bind_int(stmt, 1, i+1);  // id
                 rc = rc | sqlite3_bind_int(stmt, 2, Player->score);  // score
                 rc = rc | sqlite3_bind_int(stmt, 3, wave);  // wave
-                rc = rc | sqlite3_bind_text(stmt, 4, Hiscores[i].name, 3, SQLITE_TRANSIENT); // name
+                rc = rc | sqlite3_bind_text(stmt, 4, Hiscores[i].name, 3, NULL); // name
                 if (rc == SQLITE_OK) sqlite3_step(stmt);
                 sqlite3_clear_bindings(stmt);
                 sqlite3_finalize(stmt);
