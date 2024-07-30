@@ -87,9 +87,7 @@ SDL_Joystick *initScreen(int *actRows, int* actCols) {
 // Hiscore table
 void initHiscores(hiscore *Hiscores, sqlite3 *context) {
     int i, rc, rows, cols;
-    char *createSql;
-    char *readSql;
-    char *insertSql;
+    char *createSql, *readSql;
     char *errMsg = 0;
     char **results = 0;
     rc = sqlite3_open("invaders.db", &context);
@@ -113,16 +111,13 @@ void initHiscores(hiscore *Hiscores, sqlite3 *context) {
         }
     }
     for(i = 0; i < MAX_HISCORES; i++) {
-        // TODO Fix table data extract, and insert
-        /*
-        if(results) {
-            if(i<rows) {
-                sprintf(Hiscores[i].name, results[3*(i+1)]);
-                Hiscores[i].score = atoi(results[(i+1)]);
-                Hiscores[i].wave = atoi(results[2*(i+1)]);
-            }
+        if(results && i<rows) {
+            int baseRow = (i+1)*4;
+            sprintf(Hiscores[i].name, "%s", results[baseRow+3]);
+            Hiscores[i].score = atoi(results[baseRow+1]);
+            Hiscores[i].wave = atoi(results[baseRow+2]);
+            continue;
         }
-        */
         sprintf(Hiscores[i].name, "---");
         Hiscores[i].score = 0;
         Hiscores[i].wave = 0;
@@ -130,12 +125,24 @@ void initHiscores(hiscore *Hiscores, sqlite3 *context) {
     if(results) sqlite3_free_table(results);
 }
 
-int checkHiscore(player *Player, hiscore *Hiscores, int wave) {
-    int i;
+int checkHiscore(sqlite3 *context, player *Player, hiscore *Hiscores, int wave) {
+    int i, rc;
+    sqlite3_stmt* stmt = 0;
+    char *insertSql = "REPLACE INTO HISCORES(ID,SCORE,WAVE,NAME) VALUES (?,?,?,?);";
     for(i = 0; i < MAX_HISCORES; i++) {
         if (Player->score + wave > Hiscores[i].score + Hiscores[i].wave) {
             Hiscores[i].score = Player->score;
             Hiscores[i].wave = wave;
+            if (context) {
+                rc = sqlite3_prepare_v2(context, insertSql, -1, &stmt, NULL);
+                rc = rc | sqlite3_bind_int(stmt, 1, i+1);  // id
+                rc = rc | sqlite3_bind_int(stmt, 2, Player->score);  // score
+                rc = rc | sqlite3_bind_int(stmt, 3, wave);  // wave
+                rc = rc | sqlite3_bind_text(stmt, 4, Hiscores[i].name, 3, SQLITE_TRANSIENT); // name
+                if (rc == SQLITE_OK) sqlite3_step(stmt);
+                sqlite3_clear_bindings(stmt);
+                sqlite3_finalize(stmt);
+            }
             break;
         }
     }

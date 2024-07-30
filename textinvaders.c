@@ -55,7 +55,7 @@ int main(void) {
         }
 
         if(Player.lives == 0) {
-            hiscoreIndex = checkHiscore(&Player, &Hiscores[0], wave);
+            hiscoreIndex = checkHiscore(dbContext, &Player, &Hiscores[0], wave);
             gameOver(rows, cols, wave, hiscoreIndex, &Player, &Hiscores[0]);
         }
     } while(Player.lives == 0);
