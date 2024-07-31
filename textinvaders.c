@@ -9,6 +9,7 @@
 #include "render.h"
 #include "physics.h"
 #include "input.h"
+#include "hiscores.h"
 
 int main(void) {
     bool isRunning;
@@ -55,8 +56,9 @@ int main(void) {
         }
 
         if(Player.lives == 0) {
-            hiscoreIndex = checkHiscore(dbContext, &Player, &Hiscores[0], wave);
+            hiscoreIndex = checkHiscore(&Player, &Hiscores[0], wave);
             gameOver(rows, cols, wave, hiscoreIndex, &Player, &Hiscores[0]);
+            updateDbScores(dbContext, &Hiscores[0]);
         }
     } while(Player.lives == 0);
 
