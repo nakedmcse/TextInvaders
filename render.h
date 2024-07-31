@@ -107,6 +107,7 @@ void initBases(int rows, int cols) {
 }
 
 void gameOver(int rows, int cols, int wave, int hiscoreIndex, player *Player, hiscore *Hiscores) {
+    char name[4];
     clear();
     int i;
     int startRow = (rows-(5+MAX_HISCORES))/2;
@@ -116,7 +117,19 @@ void gameOver(int rows, int cols, int wave, int hiscoreIndex, player *Player, hi
     for(i = 0; i < MAX_HISCORES; i++) {
         mvprintw(startRow+5+i, (cols-20)/2, " %05d    %02d   %s", Hiscores[i].score, Hiscores[i].wave, Hiscores[i].name);
     }
-    if (hiscoreIndex != MAX_HISCORES) mvprintw(startRow+5+hiscoreIndex, ((cols-20)/2)+15, "NEW");
+    if (hiscoreIndex != MAX_HISCORES) {
+        move(startRow+5+hiscoreIndex, ((cols-20)/2)+15);
+        curs_set(1);
+        nodelay(stdscr, FALSE);
+        echo();
+        refresh();
+        getnstr(name,3);
+        sprintf(Hiscores[hiscoreIndex].name, "%s", name);
+        curs_set(0);
+        nodelay(stdscr, TRUE);
+        noecho();
+        refresh();
+    }
     refresh();
     while(getch() == ERR) {};
     clear();
