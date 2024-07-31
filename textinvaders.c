@@ -25,7 +25,11 @@ int main(void) {
 #endif
     bool isRunning;
     int rows, cols, wave, hiscoreIndex;
+#ifdef _WIN32
+    int frame_timer = 0, frame_divisor = 50;
+#else
     int frame_timer = 0, frame_divisor = 1000;
+#endif
     int invaderDirection = INVADER_LEFT;
     player Player;
     invader Invaders[MAX_INVADERS];
