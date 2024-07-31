@@ -4,7 +4,7 @@ Text based space invaders in C.
 Inspired by Dave Plumbers version on PDP.
 
 ## Building:
-This uses the ncurses library and SDL2 library, which must both be installed in order to compile.
+This uses the ncurses, SQLite3 and SDL2 libraries, which must all be installed in order to compile.
 
 Mac:
 ```bash
@@ -16,7 +16,7 @@ gcc -O3 -o textinvaders -I/usr/local/include/SDL2 -D_THREAD_SAFE -L/usr/local/li
 Linux:
 ```bash
 sudo apt-get install libsdl2-dev sqlite3 libsqlite3-dev
-gcc -O3 -o textinvaders textinvaders.c -lncurses -lSDL2
+gcc -O3 -o textinvaders textinvaders.c -lncurses -lSDL2 -lsqlite3
 ```
 
 Windows:

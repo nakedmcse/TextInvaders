@@ -19,22 +19,29 @@ sqlite3 *createContext() {
     return context;
 }
 
-sqlite3 *initHiscores(hiscore *Hiscores) {
-    int i, rc, rows, cols;
+char **readDbScores(sqlite3 *context, int *rows) {
+    int rc, cols;
     char *readSql = "SELECT ID,SCORE,WAVE,NAME FROM HISCORES;";
     char *errMsg = 0;
     char **results = 0;
-    sqlite3 *context = createContext();
 
     if (context) {
-        rc = sqlite3_get_table(context, readSql, &results, &rows, &cols, &errMsg);
+        rc = sqlite3_get_table(context, readSql, &results, rows, &cols, &errMsg);
         if (rc!=SQLITE_OK) {
             sqlite3_free(errMsg);
             sqlite3_free_table(results);
-            sqlite3_close(context);
-            context = NULL;
+            return NULL;
         }
     }
+    return results;
+}
+
+sqlite3 *initHiscores(hiscore *Hiscores) {
+    int i, rows;
+    char **results = 0;
+    sqlite3 *context = createContext();
+
+    results = readDbScores(context, &rows);
     for(i = 0; i < MAX_HISCORES; i++) {
         if(results && i<rows) {
             int baseRow = (i+1)*4;
