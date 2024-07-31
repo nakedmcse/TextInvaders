@@ -26,22 +26,23 @@ https://github.com/skeeto/w64devkit/releases/
 
 Dowload SDL2 mingw release zip file
 https://github.com/libsdl-org/SDL/releases
-Extract bin, include, share and lib from x86_64-w64-mingw32 folder to c:\w64devkit (ie merge the folders)
+Extract bin, include, share and lib from x86_64-w64-mingw32 folder to c:\w64devkit 
 
 Download NCurses mingw zip file
 https://invisible-island.net/datafiles/release/mingw64.zip
-extract bin, include and lib to c:\w64devkit (ie merge the folders)
+Extract bin, include and lib to c:\w64devkit 
 
 Open CMD
 cd c:\w64devkit\src
 git clone https://github.com/nakedmcse/TextInvaders
-Edit textinvaders.c line 6 change to #include<ncursesw/ncurses.h>
-Edit textinvaders.c line 13 change to int WinMain(int argc, char*argv[])
-Edit textinvaders.c line 16 int frame_timer = 0, frame_divisor = 50;
+
+Download SQLite3 Amalgamation zip file
+https://sqlite.org/download.html
+Extract sqlite3.c and sqlite3.h to src/TextInvaders
 
 cd ..
 w64devkit.exe
 cd /w64devkit
-gcc -O3 -o textinvaders.exe src/TextInvaders/textinvaders.c -IC:/w64devkit/include -lncursesw -lSDL2
+gcc -O3 -o textinvaders.exe src/TextInvaders/textinvaders.c src/TextInvaders/sqlite3.c -IC:/w64devkit/include -lncursesw -lSDL2
 textinvaders.exe
 ```
