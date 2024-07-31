@@ -2,16 +2,27 @@
 #include<stdio.h>
 #include<stdbool.h>
 #include<stdlib.h>
+
+#ifdef _WIN32
+#include<ncursesw/ncurses.h>
+#include "sqlite3.h"
+#else
 #include<ncurses.h>
-#include<SDL2/SDL.h>
 #include<sqlite3.h>
+#endif
+
+#include<SDL2/SDL.h>
 #include "types.h"
 #include "render.h"
 #include "physics.h"
 #include "input.h"
 #include "hiscores.h"
 
+#ifdef _WIN32
+int WinMain(int argc, char*argv[]) {
+# else
 int main(void) {
+#endif
     bool isRunning;
     int rows, cols, wave, hiscoreIndex;
     int frame_timer = 0, frame_divisor = 1000;
