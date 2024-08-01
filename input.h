@@ -1,6 +1,7 @@
 // Input Engine
 #ifndef TEXTINVADER_INPUT
 #define TEXTINVADER_INPUT
+#include "audio.h"
 
 void movePlayerLeft(player *Player) {
     if(Player->X-1 > 2) {
@@ -16,7 +17,7 @@ void movePlayerRight(player *Player) {
     }
 }
 
-void spawnBullet(player *Player) {
+bool spawnBullet(player *Player) {
     int b = 0;
     for(b = 0; b < MAX_PLAYER_BULLETS; b++) {
         if(Player->bullets[b].active == false) {
@@ -26,12 +27,13 @@ void spawnBullet(player *Player) {
             Player->bullets[b].Y = Player->Y-1;
             Player->bullets[b].active = true;
             Player->bullets[b].direction = BULLET_UP;
-            break;
+            return true;
         }
     }
+    return false;
 }
 
-bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer) {
+bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer, SDL_AudioDeviceID audioId, Uint8 *fire, Uint32 len) {
     int ch = getch();
     bool quit = false;
 
@@ -39,7 +41,7 @@ bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer) {
         SDL_Event joyEvt;
         if (SDL_PollEvent(&joyEvt)) {
             if (joyEvt.type == SDL_JOYBUTTONDOWN) {
-                spawnBullet(Player);
+                if(spawnBullet(Player) && audioId>0) playAudio(audioId, fire, len);
             }
         }
 

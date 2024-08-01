@@ -17,6 +17,7 @@
 #include "physics.h"
 #include "input.h"
 #include "hiscores.h"
+#include "audio.h"
 
 #ifdef _WIN32
 int WinMain(int argc, char*argv[]) {
@@ -35,11 +36,15 @@ int main(void) {
     invader Invaders[MAX_INVADERS];
     explosion Explosions[MAX_EXPLOSIONS];
     hiscore Hiscores[MAX_HISCORES];
+    Uint8 *fireWAV = NULL, *explodeWAV = NULL;
+    Uint32 fireLen, explodeLen;
+    SDL_AudioDeviceID audioId;
     SDL_Joystick *joystick = NULL;
     sqlite3 *dbContext = NULL;
 
-    // Init Screen and hi score table
+    // Init Screen, Audio and hi score table
     joystick = initScreen(&rows, &cols);
+    audioId = initAudio(&fireWAV, &fireLen, &explodeWAV, &explodeLen);
     dbContext = initHiscores(&Hiscores[0]);
 
     do {
@@ -64,7 +69,7 @@ int main(void) {
             drawBullets(&Player, &Invaders[0]);
             if(frame_timer == 0) moveBullets(&Player, &Invaders[0]);
             drawScores(&Player, wave, cols);
-            isRunning = pollInput(&Player, joystick, frame_timer) && isRunning;
+            isRunning = pollInput(&Player, joystick, frame_timer, audioId, fireWAV, fireLen) && isRunning;
             refresh();
             frame_timer++;
             frame_timer = frame_timer % frame_divisor;
@@ -79,6 +84,7 @@ int main(void) {
 
     endwin();
     SDL_JoystickClose(joystick);
+    closeAudio(audioId, fireWAV, explodeWAV);
     SDL_Quit();
     if (dbContext) sqlite3_close(dbContext);
     return 0;
