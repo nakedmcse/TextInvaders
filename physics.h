@@ -1,6 +1,7 @@
 // Rendering Engine
 #ifndef TEXTINVADER_PHYSICS
 #define TEXTINVADER_PHYSICS
+#include "audio.h"
 
 // Player
 void initPlayer(player *Player, int rows, int cols) {
@@ -164,7 +165,7 @@ void moveBullets(player *Player, invader *Invaders) {
 }
 
 // Collisions
-bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
+bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions, SDL_AudioDeviceID audioId, Uint8 *explode, Uint32 len) {
     int ch = 0, b = 0, i = 0;
     for(b = 0; b < MAX_PLAYER_BULLETS; b++) {
         if(Player->bullets[b].active)
@@ -188,7 +189,12 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions) {
                         if (Invaders[i].Y == Player->bullets[b].Y && Player->bullets[b].X >= Invaders[i].X-2 && Player->bullets[b].X <= Invaders[i].X+2) {
                             Invaders[i].active = false;
                             spawnExplosion(Explosions, Invaders[i].X-2, Invaders[i].Y, Invaders[i].X+2, Invaders[i].Y, 6);
-                            beep();
+                            if(audioId>0 && explode) {
+                                playAudio(audioId, explode, len);
+                            }
+                            else {
+                                beep();
+                            }
                             break;
                         }
                     }

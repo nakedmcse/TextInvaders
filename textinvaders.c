@@ -63,7 +63,7 @@ int main(void) {
             drawPlayer(Player);
             if(frame_timer == 0) moveInvaders(&Invaders[0], &invaderDirection, cols, &wave);
             drawInvaders(&Invaders[0]);
-            isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0]);
+            isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0], audioId, explodeWAV, explodeLen);
             if(frame_timer == 0) drawExplosions(&Explosions[0], cols);
             if(frame_timer == 0) fireInvaders(&Invaders[0], &Player, wave);
             drawBullets(&Player, &Invaders[0]);
