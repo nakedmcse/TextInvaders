@@ -37,7 +37,7 @@ bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer) {
 
     if(joystick) {
         SDL_Event joyEvt;
-        while (SDL_PollEvent(&joyEvt)) {
+        if (SDL_PollEvent(&joyEvt)) {
             if (joyEvt.type == SDL_JOYBUTTONDOWN) {
                 spawnBullet(Player);
             }
