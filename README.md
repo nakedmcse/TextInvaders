@@ -8,15 +8,14 @@ This uses the ncurses, SQLite3 and SDL2 libraries, which must all be installed i
 
 Mac:
 ```bash
-brew install sdl2
-brew install sqlite
-gcc -O3 -o textinvaders -I/usr/local/include/SDL2 -D_THREAD_SAFE -L/usr/local/lib textinvaders.c -lncurses -lSDL2 -lsqlite3
+brew install sdl2 sqlite
+make
 ```
 
 Linux:
 ```bash
 sudo apt-get install libsdl2-dev sqlite3 libsqlite3-dev
-gcc -O3 -o textinvaders textinvaders.c -lncurses -lSDL2 -lsqlite3
+make
 ```
 
 Windows:
@@ -42,7 +41,7 @@ Extract sqlite3.c and sqlite3.h to src/TextInvaders
 
 cd ..
 w64devkit.exe
-cd /w64devkit
-gcc -O3 -o textinvaders.exe src/TextInvaders/textinvaders.c src/TextInvaders/sqlite3.c -IC:/w64devkit/include -lncursesw -lSDL2
+cd /w64devkit/src/TextInvaders
+make windows
 textinvaders.exe
 ```
