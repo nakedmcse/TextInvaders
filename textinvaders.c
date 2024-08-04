@@ -64,16 +64,21 @@ int main(void) {
 
         // Main Loop
         while(isRunning) {
-            drawPlayer(Player);
-            if(frame_timer == 0) moveInvaders(&Invaders[0], &invaderDirection, cols, &wave);
-            drawInvaders(&Invaders[0]);
             isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0], audioId, explodeWAV, explodeLen);
-            if(frame_timer == 0) drawExplosions(&Explosions[0], cols);
-            if(frame_timer == 0) fireInvaders(&Invaders[0], &Player, wave);
-            drawBullets(&Player, &Invaders[0]);
-            if(frame_timer == 0) moveBullets(&Player, &Invaders[0]);
-            drawScores(&Player, wave, cols);
             isRunning = pollInput(&Player, joystick, frame_timer, audioId, fireWAV, fireLen) && isRunning;
+
+            drawPlayer(Player);
+            drawInvaders(&Invaders[0]);
+            drawBullets(&Player, &Invaders[0]);
+            drawScores(&Player, wave, cols);
+
+            if(frame_timer == 0) {
+                moveInvaders(&Invaders[0], &invaderDirection, cols, &wave);
+                fireInvaders(&Invaders[0], &Player, wave);
+                moveBullets(&Player, &Invaders[0]);
+                drawExplosions(&Explosions[0], cols);
+            }
+
             refresh();
             frame_timer++;
             frame_timer = frame_timer % frame_divisor;
