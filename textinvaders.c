@@ -53,7 +53,11 @@ int main(void) {
         initInvaders(&Invaders[0], cols, wave);
         initPlayer(&Player, rows, cols);
         initExplosions(&Explosions[0]);
+#ifdef _WIN32
+        if(joystick) frame_divisor = 50;
+#else
         if(joystick) frame_divisor = 500;
+#endif
         gameStart(rows, cols);
         initBases(rows, cols);
         isRunning = true;
