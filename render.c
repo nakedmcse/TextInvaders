@@ -78,7 +78,7 @@ void drawBullets(player *Player, invader *Invaders) {
 }
 
 // Screen
-SDL_Joystick *initScreen(int *actRows, int* actCols) {
+void initScreen(int *actRows, int* actCols) {
     initscr();
     getmaxyx(stdscr, *actRows, *actCols);
     clear();
@@ -87,6 +87,9 @@ SDL_Joystick *initScreen(int *actRows, int* actCols) {
     noecho();
     nodelay(stdscr, TRUE);
     refresh();
+}
+
+SDL_Joystick *initSDL() {
     SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_AUDIO);
     return SDL_JoystickOpen(0);
 }

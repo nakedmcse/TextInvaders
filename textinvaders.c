@@ -43,7 +43,8 @@ int main(void) {
     sqlite3 *dbContext = NULL;
 
     // Init Screen, Audio and hi score table
-    joystick = initScreen(&rows, &cols);
+    initScreen(&rows, &cols);
+    joystick = initSDL();
     audioId = initAudio(&fireWAV, &fireLen, &explodeWAV, &explodeLen);
     dbContext = initHiscores(&Hiscores[0]);
 
