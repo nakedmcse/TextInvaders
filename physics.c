@@ -2,6 +2,7 @@
 #include<stdbool.h>
 #include<stdlib.h>
 #include<SDL2/SDL.h>
+#include<SDL2/SDL_mixer.h>
 #include "types.h"
 #include "audio.h"
 #ifdef _WIN32
@@ -172,7 +173,7 @@ void moveBullets(player *Player, invader *Invaders) {
 }
 
 // Collisions
-bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions, SDL_AudioDeviceID audioId, Uint8 *explode, Uint32 len) {
+bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions, Mix_Chunk *explode) {
     int ch = 0, b = 0, i = 0;
     for(b = 0; b < MAX_PLAYER_BULLETS; b++) {
         if(Player->bullets[b].active)
@@ -195,9 +196,10 @@ bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions, S
                         if (!Invaders[i].active) continue;
                         if (Invaders[i].Y == Player->bullets[b].Y && Player->bullets[b].X >= Invaders[i].X-2 && Player->bullets[b].X <= Invaders[i].X+2) {
                             Invaders[i].active = false;
+                            mvprintw(Invaders[i].oldY, Invaders[i].oldX-2, "     ");
                             spawnExplosion(Explosions, Invaders[i].X-2, Invaders[i].Y, Invaders[i].X+2, Invaders[i].Y, 6);
-                            if(audioId>0 && explode) {
-                                playAudio(audioId, explode, len);
+                            if(explode) {
+                                playMixer(explode);
                             }
                             else {
                                 beep();

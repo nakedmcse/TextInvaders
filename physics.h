@@ -12,6 +12,6 @@ void initExplosions(explosion *Explosions);
 void spawnExplosion(explosion *Explosions, int x, int y, int xEnd, int yEnd, int frames);
 void moveBullets(player *Player, invader *Invaders);
 
-bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions, SDL_AudioDeviceID audioId, Uint8 *explode, Uint32 len);
+bool checkCollisions(player *Player, invader *Invaders, explosion *Explosions, Mix_Chunk *explode);
 
 #endif

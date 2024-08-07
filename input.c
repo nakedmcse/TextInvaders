@@ -1,6 +1,7 @@
 // Input
 #include<stdbool.h>
 #include<SDL2/SDL.h>
+#include<SDL2/SDL_mixer.h>
 #ifdef _WIN32
 #include<ncursesw/ncurses.h>
 #else
@@ -39,7 +40,7 @@ bool spawnBullet(player *Player) {
     return false;
 }
 
-bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer, SDL_AudioDeviceID audioId, Uint8 *fire, Uint32 len) {
+bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer, Mix_Chunk *fire) {
     int ch = getch();
     bool quit = false;
 
@@ -47,7 +48,7 @@ bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer, SDL_Audi
         SDL_Event joyEvt;
         if (SDL_PollEvent(&joyEvt)) {
             if (joyEvt.type == SDL_JOYBUTTONDOWN) {
-                if(spawnBullet(Player) && audioId>0) playAudio(audioId, fire, len);
+                if(spawnBullet(Player) && fire) playMixer(fire);
             }
         }
 
@@ -70,7 +71,7 @@ bool pollInput(player *Player, SDL_Joystick *joystick, int frame_timer, SDL_Audi
         quit = true;
         break;
     case ' ':
-        spawnBullet(Player);
+        if(spawnBullet(Player) && fire) playMixer(fire);
         break;
     }
 

@@ -12,6 +12,7 @@
 #endif
 
 #include<SDL2/SDL.h>
+#include<SDL2/SDL_mixer.h>
 #include "types.h"
 #include "render.h"
 #include "physics.h"
@@ -36,16 +37,14 @@ int main(void) {
     invader Invaders[MAX_INVADERS];
     explosion Explosions[MAX_EXPLOSIONS];
     hiscore Hiscores[MAX_HISCORES];
-    Uint8 *fireWAV = NULL, *explodeWAV = NULL;
-    Uint32 fireLen, explodeLen;
-    SDL_AudioDeviceID audioId;
+    Mix_Chunk *fireWAV = NULL, *explodeWAV = NULL;
     SDL_Joystick *joystick = NULL;
     sqlite3 *dbContext = NULL;
 
     // Init Screen, Audio and hi score table
     initScreen(&rows, &cols);
     joystick = initSDL();
-    audioId = initAudio(&fireWAV, &fireLen, &explodeWAV, &explodeLen);
+    initMixer(&fireWAV, &explodeWAV);
     dbContext = initHiscores(&Hiscores[0]);
 
     do {
@@ -65,8 +64,8 @@ int main(void) {
 
         // Main Loop
         while(isRunning) {
-            isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0], audioId, explodeWAV, explodeLen);
-            isRunning = pollInput(&Player, joystick, frame_timer, audioId, fireWAV, fireLen) && isRunning;
+            isRunning = checkCollisions(&Player, &Invaders[0], &Explosions[0], explodeWAV);
+            isRunning = pollInput(&Player, joystick, frame_timer, fireWAV) && isRunning;
 
             drawPlayer(Player);
             drawInvaders(&Invaders[0]);
@@ -94,7 +93,7 @@ int main(void) {
 
     endwin();
     SDL_JoystickClose(joystick);
-    closeAudio(audioId, fireWAV, explodeWAV);
+    closeMixer(fireWAV, explodeWAV);
     SDL_Quit();
     if (dbContext) sqlite3_close(dbContext);
     return 0;

@@ -1,21 +1,19 @@
 // Audio
 #include<SDL2/SDL.h>
+#include<SDL2/SDL_mixer.h>
 
-SDL_AudioDeviceID initAudio(Uint8 **fireBuffer, Uint32 *fireLen, Uint8 **explodeBuffer, Uint32 *explodeLen) {
-    SDL_AudioSpec wavSpec;
-    SDL_LoadWAV("assets/fire.wav", &wavSpec, fireBuffer, fireLen);
-    SDL_LoadWAV("assets/explode.wav", &wavSpec, explodeBuffer, explodeLen);
-    return SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+void initMixer(Mix_Chunk **fireBuffer, Mix_Chunk **explodeBuffer) {
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    *fireBuffer = Mix_LoadWAV("assets/fire.wav");
+    *explodeBuffer = Mix_LoadWAV("assets/explode.wav");
 }
 
-void playAudio(SDL_AudioDeviceID id, Uint8 *buffer, Uint32 len) {
-    SDL_ClearQueuedAudio(id);
-    SDL_QueueAudio(id, buffer, len);
-    SDL_PauseAudioDevice(id, 0);
+void playMixer(Mix_Chunk *buffer) {
+    Mix_PlayChannel(-1, buffer, 0);
 }
 
-void closeAudio(SDL_AudioDeviceID id, Uint8 *fireBuffer, Uint8 *explodeBuffer) {
-    SDL_CloseAudioDevice(id);
-    SDL_FreeWAV(fireBuffer);
-    SDL_FreeWAV(explodeBuffer);
+void closeMixer(Mix_Chunk *fireBuffer, Mix_Chunk *explodeBuffer) {
+    Mix_FreeChunk(fireBuffer);
+    Mix_FreeChunk(explodeBuffer);
+    Mix_Quit();
 }
